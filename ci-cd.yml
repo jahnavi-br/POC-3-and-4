@@ -1,0 +1,33 @@
+name: ci-cd
+
+on: 
+  workflow_disptach:
+    inputs:
+     environments:
+        description: to deploy envy
+        type: environment
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: code checkout 
+        uses: actions/checkout@v4
+
+      - name: setup checkout
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+
+      - name: build
+        run: |
+          dotnet build
+
+      - name: dotnet oublish
+        run: |
+          dotnet publis -o ${{}}
