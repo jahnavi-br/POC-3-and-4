@@ -1,10 +1,10 @@
 name: ci-cd
 
-on: 
-  workflow_disptach:
+on:
+  workflow_dispatch:
     inputs:
-     environments:
-        description: to deploy envy
+      environments:
+        description: Environment to deploy
         type: environment
         required: true
 
@@ -12,22 +12,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps: 
-      - name: code checkout 
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: setup checkout
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
 
       - name: Restore dependencies
-        run: |
-          dotnet restore
+        run: dotnet restore
 
-      - name: build
-        run: |
-          dotnet build
+      - name: Build
+        run: dotnet build
 
-      - name: dotnet oublish
-        run: |
-          dotnet publis -o ${{}}
+      - name: Publish
+        run: dotnet publish -o ${{ vars.ARTIFACTPATH }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build-artifacts
+          path: ${{ vars.ARTIFACTPATH }}
