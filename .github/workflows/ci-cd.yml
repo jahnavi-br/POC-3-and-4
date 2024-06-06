@@ -22,16 +22,16 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore 'MyConsoleApp/MyConsoleApp.csproj'
 
       - name: Build
-        run: dotnet build --no-restore # Adding --no-restore to avoid restoring again
+        run: dotnet build 'MyConsoleApp/MyConsoleApp.csproj' --no-restore
 
       - name: Publish
-        run: dotnet publish -c Release -o ${{ github.workspace }}/artifacts # Specify configuration and output path
+        run: dotnet publish 'MyConsoleApp/MyConsoleApp.csproj' -c Release -o ${{ github.workspace }}/artifacts
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Build-artifacts
-          path: ${{ github.workspace }}/artifacts # Make sure this path matches the publish step
+          path: ${{ github.workspace }}/artifacts
