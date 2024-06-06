@@ -11,7 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -24,13 +25,13 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build
+        run: dotnet build --no-restore # Adding --no-restore to avoid restoring again
 
       - name: Publish
-        run: dotnet publish -o ${{ vars.ARTIFACTPATH }}
+        run: dotnet publish -c Release -o ${{ github.workspace }}/artifacts # Specify configuration and output path
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Build-artifacts
-          path: ${{ vars.ARTIFACTPATH }}
+          path: ${{ github.workspace }}/artifacts # Make sure this path matches the publish step
